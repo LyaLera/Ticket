@@ -2,6 +2,8 @@ package ru.netology.repository;
 
 import ru.netology.domain.Ticket;
 
+import java.util.Comparator;
+
 public class TicketRepository {
     private Ticket[] tickets = new Ticket[0];
 
@@ -27,7 +29,7 @@ public class TicketRepository {
         tickets = tmp;
     }
 
-    public Ticket[] findAll(String from, String to) {
+    public Ticket[] findAll(String from, String to, Comparator<Ticket> comparator) {
         return tickets;
     }
 }
