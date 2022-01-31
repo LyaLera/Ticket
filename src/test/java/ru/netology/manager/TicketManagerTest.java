@@ -1,11 +1,8 @@
 package ru.netology.manager;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.domain.Ticket;
 import ru.netology.repository.TicketRepository;
-
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,34 +15,73 @@ class TicketManagerTest {
     Ticket third = new Ticket(3, 9000, "AAQ", "ATH", 1000);
     Ticket fourth = new Ticket(4, 12000, "AVN", "ATH", 1300);
     Ticket fifth = new Ticket(5, 16000, "AVN", "ATH", 1200);
+    Ticket sixth = new Ticket(6, 17000, "AVN", "ATH", 1200);
+    Ticket seventh = new Ticket(7, 16000, "AVN", "ATH", 1200);
+    Ticket eight = new Ticket(8, 18000, "AVN", "ATH", 1200);
+    Ticket ninth = new Ticket(9, 15000, "AVN", "ATH", 1200);
+    Ticket tenth = new Ticket(10, 16000, "AVN", "ATH", 1200);
 
-    @BeforeEach
-    public void setUp() {
+
+    @Test
+    public void shouldSearchByFromAndByToIfMatch() {
+
         manager.add(first);
         manager.add(second);
         manager.add(third);
         manager.add(fourth);
         manager.add(fifth);
+        manager.add(sixth);
+        manager.add(seventh);
+        manager.add(eight);
+        manager.add(ninth);
+        manager.add(tenth);
+
+        Ticket[] actual = manager.findAll(eight.getFrom(), eight.getTo());
+        Ticket[] expected = new Ticket[]{fourth, ninth, fifth, seventh, tenth, sixth, eight};
+
+        assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldSearchTicketByFromAndByTo() {
-        Ticket[] actual = manager.searchBy(first.getFrom(), first.getTo());
-        Ticket[] expected = new Ticket[]{second, first};
+    public void shouldSearchByFromAndByToIfOne() {
 
-        Arrays.sort(actual);
+        manager.add(ninth);
+
+        Ticket[] actual = manager.findAll(ninth.getFrom(), ninth.getTo());
+        Ticket[] expected = new Ticket[]{ninth};
+
+        assertArrayEquals(expected, actual);
+    }
+
+
+    @Test
+    public void shouldNotSearchIfEmpty() {
+
+        Ticket[] actual = manager.findAll(first.getFrom(), first.getTo());
+        Ticket[] expected = new Ticket[]{};
+
         assertArrayEquals(expected, actual);
     }
 
     @Test
     public void shouldNotSearchIfNotExists() {
 
+        manager.add(first);
+        manager.add(second);
+        manager.add(third);
+        manager.add(fourth);
+        manager.add(fifth);
+        manager.add(sixth);
+        manager.add(seventh);
+        manager.add(eight);
+        manager.add(ninth);
+        manager.add(tenth);
+
         repository.removeById(4);
 
-        Ticket[] actual = manager.searchBy(fourth.getFrom(), fourth.getTo());
-        Ticket[] expected = new Ticket[]{fifth};
+        Ticket[] actual = manager.findAll(fourth.getFrom(), fourth.getTo());
+        Ticket[] expected = new Ticket[]{ninth, fifth, seventh, tenth, sixth, eight};
 
-        Arrays.sort(actual);
         assertArrayEquals(expected, actual);
     }
 }
