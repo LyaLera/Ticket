@@ -3,10 +3,12 @@ package ru.netology.manager;
 import ru.netology.domain.Ticket;
 import ru.netology.repository.TicketRepository;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class TicketManager {
     private TicketRepository repository;
+    private Ticket[] tickets = new Ticket[0];
 
     public TicketManager(TicketRepository repository) {
         this.repository = repository;
@@ -16,15 +18,16 @@ public class TicketManager {
         repository.save(ticket);
     }
 
-    public Ticket[] searchBy(String textFrom, String textTo) {
+    public Ticket[] findAll(String from, String to, Comparator<Ticket> comparator) {
         Ticket[] result = new Ticket[0];
-        for (Ticket ticket : repository.findAll(textFrom, textTo, Comparator.comparing(Ticket::getTravelTime))) {
-            if (ticket.getFrom().contains(textFrom) && ticket.getTo().contains(textTo)) {
-                Ticket[] tmp = new Ticket[result.length + 1];
-                System.arraycopy(result, 0, tmp, 0, result.length);
-                tmp[tmp.length - 1] = ticket;
-                result = tmp;
-            }
+        for(Ticket ticket : tickets)
+        if (ticket.getFrom().contains(from) && ticket.getTo().contains(to)) {
+            Ticket[] tmp = new Ticket[result.length + 1];
+            System.arraycopy(result, 0, tmp, 0, result.length);
+            tmp[tmp.length - 1] = ticket;
+            result = tmp;
+
+            Arrays.sort(result, comparator);
         }
         return result;
     }

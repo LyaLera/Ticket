@@ -7,6 +7,7 @@ import ru.netology.domain.TicketByTravelTimeComparator;
 import ru.netology.repository.TicketRepository;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +37,7 @@ class TicketManagerTest {
 
     @Test
     public void shouldSortByPrice() {
-        Ticket[] actual = manager.searchBy(first.getFrom(), first.getTo());
+        Ticket[] actual = manager.findAll(first.getFrom(), first.getTo(), Comparator.comparing(Ticket::getTravelTime));
         Ticket[] expected = new Ticket[]{second, first};
 
         Arrays.sort(actual);
@@ -45,7 +46,7 @@ class TicketManagerTest {
 
     @Test
     public void shouldSortByPriceIfEqual() {
-        Ticket[] actual = manager.searchBy(sixth.getFrom(), sixth.getTo());
+        Ticket[] actual = manager.findAll(sixth.getFrom(), sixth.getTo(), Comparator.comparing(Ticket::getTravelTime));
         Ticket[] expected = new Ticket[]{sixth, seventh};
 
         Arrays.sort(actual);
@@ -54,7 +55,7 @@ class TicketManagerTest {
 
     @Test
     public void shouldSortByTravelTime() {
-        Ticket[] actual = manager.searchBy(fourth.getFrom(), fourth.getTo());
+        Ticket[] actual = manager.findAll(fourth.getFrom(), fourth.getTo(), Comparator.comparing(Ticket::getTravelTime));
         Ticket[] expected = new Ticket[]{fifth, fourth};
 
         Arrays.sort(actual, comparator);
@@ -63,7 +64,7 @@ class TicketManagerTest {
 
     @Test
     public void shouldSortByTravelTimeIfEqual() {
-        Ticket[] actual = manager.searchBy(first.getFrom(), first.getTo());
+        Ticket[] actual = manager.findAll(first.getFrom(), first.getTo(), Comparator.comparing(Ticket::getTravelTime));
         Ticket[] expected = new Ticket[]{first, second};
 
         Arrays.sort(actual, comparator);
@@ -75,7 +76,7 @@ class TicketManagerTest {
 
         repository.removeById(4);
 
-        Ticket[] actual = manager.searchBy(fourth.getFrom(), fourth.getTo());
+        Ticket[] actual = manager.findAll(fourth.getFrom(), fourth.getTo(), Comparator.comparing(Ticket::getTravelTime));
         Ticket[] expected = new Ticket[]{fifth};
 
         assertArrayEquals(expected, actual);

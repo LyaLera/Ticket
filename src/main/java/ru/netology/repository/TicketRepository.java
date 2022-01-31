@@ -28,8 +28,4 @@ public class TicketRepository {
         }
         tickets = tmp;
     }
-
-    public Ticket[] findAll(String from, String to, Comparator<Ticket> comparator) {
-        return tickets;
-    }
 }
