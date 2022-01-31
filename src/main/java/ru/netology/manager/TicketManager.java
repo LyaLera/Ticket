@@ -20,16 +20,17 @@ public class TicketManager {
 
     public Ticket[] findAll(String from, String to, Comparator<Ticket> comparator) {
         Ticket[] result = new Ticket[0];
-        for(Ticket ticket : tickets)
-        if (ticket.getFrom().contains(from) && ticket.getTo().contains(to)) {
-            Ticket[] tmp = new Ticket[result.length + 1];
-            System.arraycopy(result, 0, tmp, 0, result.length);
-            tmp[tmp.length - 1] = ticket;
-            result = tmp;
-
-            Arrays.sort(result, comparator);
+        for (Ticket ticket : repository.getALL()) {
+            if (ticket.getFrom().contains(from) && ticket.getTo().contains(to)) {
+                Ticket[] tmp = new Ticket[result.length + 1];
+                System.arraycopy(result, 0, tmp, 0, result.length);
+                tmp[tmp.length - 1] = ticket;
+                result = tmp;
+            }
         }
+        Arrays.sort(result, comparator);
         return result;
     }
 }
+
 
